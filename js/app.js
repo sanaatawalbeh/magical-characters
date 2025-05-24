@@ -1,6 +1,11 @@
 const cardContainer = document.getElementById("characterContainer");
+const filterSelect = document.getElementById("houseFilter");
+const loadMoreBtn = document.getElementById("loadMoreBtn");
 
 let allCharacters = [];
+let filteredCharacters = [];
+let currentIndex = 0;
+const charactersPerPage = 16;
 
 function fetchData() {
   fetch("https://hp-api.onrender.com/api/characters")
@@ -10,36 +15,34 @@ function fetchData() {
     })
     .then((characters) => {
       allCharacters = characters;
-      renderData(allCharacters.slice(0, 16)); // عرض أول 16 عند البداية
+      applyFilter(); //
     })
     .catch((error) => {
       console.log("Error caught here:", error);
     });
 }
-function renderData(characters) {
-  cardContainer.innerHTML = ""; // مسح القديم
 
+function renderData(characters) {
   characters.forEach((element) => {
     const card = document.createElement("div");
     card.className = "character-card";
     card.innerHTML = `
-        <img src="${
-          element.image ? element.image : "images/not-found.png"
-        }" alt="${element.name}">
-        <h2>${element.name}</h2>
-        <p><strong>House:</strong> ${element.house || "Unknown"}</p>
-       <p><strong>Birthdate:</strong> ${element.dateOfBirth || "Unknown"}</p>
-
-        
-      `;
+      <img src="${
+        element.image ? element.image : "images/not-found.png"
+      }" alt="${element.name}">
+      <h2>${element.name}</h2>
+      <p><strong>House:</strong> ${element.house || "Unknown"}</p>
+      <p><strong>Birthdate:</strong> ${element.dateOfBirth || "Unknown"}</p>
+      <p><strong>Wand:</strong> ${
+        element.wand && element.wand.wood ? element.wand.wood : "Unknown"
+      }</p>
+    `;
     cardContainer.appendChild(card);
   });
 }
-const filterSelect = document.getElementById("houseFilter");
 
-filterSelect.addEventListener("change", () => {
+function applyFilter() {
   const selectedHouse = filterSelect.value;
-  let filteredCharacters = [];
 
   if (selectedHouse === "all") {
     filteredCharacters = allCharacters;
@@ -49,7 +52,27 @@ filterSelect.addEventListener("change", () => {
     );
   }
 
-  renderData(filteredCharacters.slice(0, 16)); // عرض أول 16 من النتيجة
-});
-  
+  currentIndex = 0;
+  cardContainer.innerHTML = "";
+  renderNextBatch();
+}
+
+function renderNextBatch() {
+  const nextBatch = filteredCharacters.slice(
+    currentIndex,
+    currentIndex + charactersPerPage
+  );
+  renderData(nextBatch);
+  currentIndex += charactersPerPage;
+
+  if (currentIndex >= filteredCharacters.length) {
+    loadMoreBtn.style.display = "none";
+  } else {
+    loadMoreBtn.style.display = "block";
+  }
+}
+
+filterSelect.addEventListener("change", applyFilter);
+loadMoreBtn.addEventListener("click", renderNextBatch);
+
 fetchData();
