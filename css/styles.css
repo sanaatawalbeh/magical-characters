@@ -35,12 +35,15 @@ nav h1 {
 }
 
 nav select {
+    width: 200px;
   padding: 0.5rem;
   font-size: 1rem;
   border-radius: 1.5rem;
+  font-family: 'Harry P', cursive;
+
 }
 
-main#characterContainer {
+#characterContainer {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -97,6 +100,9 @@ main#characterContainer {
   color: white;
   cursor: pointer;
   transition: background-color 0.3s;
+  font-family: 'Harry P', cursive;
+  width:20% ;
+
 }
 
 #loadMoreBtn:hover {

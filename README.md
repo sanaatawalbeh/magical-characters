@@ -10,7 +10,7 @@ A web app that displays information about characters from the Harry Potter unive
 
 **What observations or questions do you have about what you've learned so far?**
 
-- I learned how to fetch data from an external API and display it in my website , I also learn how to handle missing data , and i improved my CSS and Javascript DOM skills .
+- I learned how to fetch data from an external API and display it in my website , I also learn how to handle missing data , and i improved my CSS and Javascript DOM skills and i learned how to make a website mobile-friendly website by using flexbox .
 
 **How long did it take you to complete this assignment? And how long did you expect it to take?**
 
