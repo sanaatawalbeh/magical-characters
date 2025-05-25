@@ -1,7 +1,3 @@
-const cardContainer = document.getElementById("characterContainer");
-const filterSelect = document.getElementById("houseFilter");
-const loadMoreBtn = document.getElementById("loadMoreBtn");
-
 let allCharacters = [];
 let filteredCharacters = [];
 let currentIndex = 0;
@@ -10,17 +6,21 @@ const charactersPerPage = 16;
 function fetchData() {
   fetch("https://hp-api.onrender.com/api/characters")
     .then((response) => {
-      if (!response.ok) throw new Error("The response is not ok");
+      if (!response.ok) {
+        throw new Error("The response is not ok");
+      }
       return response.json();
     })
     .then((characters) => {
       allCharacters = characters;
-      applyFilter(); //
+      applyFilter();
     })
     .catch((error) => {
       console.log("Error caught here:", error);
     });
 }
+
+const cardContainer = document.getElementById("characterContainer");
 
 function renderData(characters) {
   characters.forEach((element) => {
@@ -40,6 +40,7 @@ function renderData(characters) {
     cardContainer.appendChild(card);
   });
 }
+const filterSelect = document.getElementById("houseFilter");
 
 function applyFilter() {
   const selectedHouse = filterSelect.value;
@@ -57,6 +58,8 @@ function applyFilter() {
   renderNextBatch();
 }
 
+const loadMoreBtn = document.getElementById("loadMoreBtn");
+
 function renderNextBatch() {
   const nextBatch = filteredCharacters.slice(
     currentIndex,
@@ -71,7 +74,6 @@ function renderNextBatch() {
     loadMoreBtn.style.display = "block";
   }
 }
-
 filterSelect.addEventListener("change", applyFilter);
 loadMoreBtn.addEventListener("click", renderNextBatch);
 
